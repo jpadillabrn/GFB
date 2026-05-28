@@ -1,0 +1,23 @@
+{"timestamp":"2026-05-28T01:13:15.004631Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":209}
+{"timestamp":"2026-05-28T01:13:15.005298Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/dag_etl_engineer_challenge_prod.py","logger":"airflow.dag_processing.dagbag.BundleDagBag","filename":"dagbag.py","lineno":469}
+{"timestamp":"2026-05-28T01:13:15.385854Z","level":"warning","event":"The `airflow.operators.empty.EmptyOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.empty.EmptyOperator'`.","category":"UserWarning","filename":"/opt/airflow/dags/dag_etl_engineer_challenge_prod.py","lineno":18,"logger":"py.warnings"}
+{"timestamp":"2026-05-28T01:13:15.385967Z","level":"warning","event":"The `airflow.decorators.task` attribute is deprecated. Please use `'airflow.sdk.task'`.","category":"UserWarning","filename":"/opt/airflow/dags/dag_etl_engineer_challenge_prod.py","lineno":19,"logger":"py.warnings"}
+{"timestamp":"2026-05-28T01:13:15.426210Z","level":"warning","event":"Passing literal json to 'read_json' is deprecated and will be removed in a future version. To read from a literal string, wrap it in a 'StringIO' object.","category":"FutureWarning","filename":"/opt/airflow/dags/dag_etl_engineer_challenge_prod.py","lineno":160,"logger":"py.warnings"}
+{"timestamp":"2026-05-28T01:13:15.441573Z","level":"info","event":"DataFrame listo para escritura:","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445238Z","level":"info","event":"<class 'pandas.core.frame.DataFrame'>","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445335Z","level":"info","event":"RangeIndex: 1505 entries, 0 to 1504","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445390Z","level":"info","event":"Data columns (total 7 columns):","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445439Z","level":"info","event":" #   Column      Non-Null Count  Dtype","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445495Z","level":"info","event":"---  ------      --------------  -----","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445544Z","level":"info","event":" 0   id          1505 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445590Z","level":"info","event":" 1   name        1505 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445635Z","level":"info","event":" 2   company_id  1505 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445678Z","level":"info","event":" 3   amount      1505 non-null   float64","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445723Z","level":"info","event":" 4   status      1505 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445767Z","level":"info","event":" 5   created_at  1505 non-null   datetime64[ns]","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445811Z","level":"info","event":" 6   paid_at     916 non-null    datetime64[ns]","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445855Z","level":"info","event":"dtypes: datetime64[ns](2), float64(1), object(4)","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:15.445899Z","level":"info","event":"memory usage: 82.4+ KB","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:17.466856Z","level":"info","event":"AWS Connection (conn_id='***_storage', conn_type='aws') credentials retrieved from login and password.","logger":"airflow.providers.amazon.aws.utils.connection_wrapper.AwsConnectionWrapper","filename":"connection_wrapper.py","lineno":331}
+{"timestamp":"2026-05-28T01:13:17.645886Z","level":"info","event":"Archivo Parquet guardado en: s3://***_storage@bck-bronze/master/data_prueba_tecnica.parquet","logger":"task.stdout"}
+{"timestamp":"2026-05-28T01:13:17.646379Z","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.decorators.python._PythonDecoratedOperator","filename":"python.py","lineno":229}

@@ -1,0 +1,164 @@
+{"timestamp":"2026-05-27T17:32:54.658127Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":209}
+{"timestamp":"2026-05-27T17:32:54.658702Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/dag_etl_test.py","logger":"airflow.dag_processing.dagbag.BundleDagBag","filename":"dagbag.py","lineno":469}
+{"timestamp":"2026-05-27T17:32:54.966195Z","level":"warning","event":"The `airflow.operators.empty.EmptyOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.empty.EmptyOperator'`.","category":"UserWarning","filename":"/opt/airflow/dags/dag_etl_test.py","lineno":6,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T17:32:54.966302Z","level":"warning","event":"The `airflow.decorators.task` attribute is deprecated. Please use `'airflow.sdk.task'`.","category":"UserWarning","filename":"/opt/airflow/dags/dag_etl_test.py","lineno":7,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T17:32:54.991954Z","level":"info","event":"AWS Connection (conn_id='***_storage', conn_type='aws') credentials retrieved from login and password.","logger":"airflow.providers.amazon.aws.utils.connection_wrapper.AwsConnectionWrapper","filename":"connection_wrapper.py","lineno":331}
+{"timestamp":"2026-05-27T17:32:54.999294Z","level":"warning","event":"ProvidersManager.hooks is deprecated. Use ProvidersManagerTaskRuntime.hooks from task-sdk instead.","category":"DeprecatedImportWarning","filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/providers/amazon/aws/hooks/base_aws.py","lineno":520,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T17:32:55.298977Z","level":"info","event":"Archivos en el bucket: ['data/data_muestra.csv', 'data/data_prueba_tecnica.csv']","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.415875Z","level":"info","event":"Archivo procesado exitosamente. Filas: 50, Columnas: 7","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.422509Z","level":"info","event":"                                          id        name  \\","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.422599Z","level":"info","event":"0   48ba4bdbfb56ceebb32f2bd0263e759be942af3d  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.422657Z","level":"info","event":"1   05fc6f5ac66b6ee7e4253aa5d0c2299eb47aaaf4  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.422718Z","level":"info","event":"2   2cdce231c1fc6a2061bfa2f1d978351fe217245d  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.422788Z","level":"info","event":"3   81633ba310a50b673efd469c37139576982901aa  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.422853Z","level":"info","event":"4   6ccfc4c24e788e4bca448df343698782db6b0c0b  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.422902Z","level":"info","event":"5   b25f2ff15c24ea881e676be772f4dd99891ad188  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.422959Z","level":"info","event":"6   4f9db76960dcdf6b7e2d7d71b11519e49d7b1179  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423025Z","level":"info","event":"7   7e96211c7d133a6227e809abc3d3ab18992b36b9  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423071Z","level":"info","event":"8   6ee515d5f0a1995731fb31053278e9700d67947c  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423116Z","level":"info","event":"9   cdf1a7a6f5c9b0db543371f9e4bd127b451c09c9  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423160Z","level":"info","event":"10  5083f2fc28d4c63bcef7184ca4ee6e8527a9e60d  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423215Z","level":"info","event":"11  90820e39fa6aa60555edb6855a6c83e59a9ba271  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423270Z","level":"info","event":"12  315fb708b31d2b98da63db63481550cf01087c75  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423314Z","level":"info","event":"13  796fc616b760b45ebe0dc5cfc0b170d62e9320c2  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423374Z","level":"info","event":"14  221b7af73b7901a32c526553e40a289724dd023a  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423430Z","level":"info","event":"15  8ff04de2a96c9c05df0d9bd87009ba6649f7c424  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423503Z","level":"info","event":"16  78bc9783831c398cbc03b896eb620fcab9375489  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423549Z","level":"info","event":"17  32149975c2b32f5fa50b93a25c91cf067848e65e  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423587Z","level":"info","event":"18  798166c4cd9d464ab5e83b4152cfd191424bb34d  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423621Z","level":"info","event":"19  1a261c012b286d9abcc91c83769dbf91a31f7276  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423656Z","level":"info","event":"20  9778228bbb5ef7e2f5f7dac88b4fd533df4aa04a  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423690Z","level":"info","event":"21  0dca80440f819c7f3077d534e92a9634d66e279a  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423724Z","level":"info","event":"22  6a528f598c344398ce78afb995a2f52c82395f24  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423758Z","level":"info","event":"23  ab2beca2b1bb360e8e21c6c7d4ffd2c538d5e556  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423792Z","level":"info","event":"24  2f08a65c6e10505beae5a1cd544a45b1f46b6bb2  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423828Z","level":"info","event":"25  be79778857c376c2d7c4500edcfa7eb00ab9ca47  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423862Z","level":"info","event":"26  7515720474abd64ef9ab4e9aa6990cd50f59ed32  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423896Z","level":"info","event":"27  8e30aaeb7bd4400a333dfaaaca97e0b6df32985d  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423931Z","level":"info","event":"28  fc4c84b317ece0828e70be31af63f0e57f7ec76d  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423965Z","level":"info","event":"29  0e066d3752a543428d7dc81c537adaad7a4a4bca  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423999Z","level":"info","event":"30  7ce16fa25eecf4465993708f6be270d9fe68245d  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424035Z","level":"info","event":"31  b92339e9ff0ecc7e551939474b5a410238719d83  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424070Z","level":"info","event":"32  4e95db9854058e34950d6b05f187dc3bf7ff29eb  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424104Z","level":"info","event":"33  63276fa5b4b369647917687574c3a54d011de95d  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424138Z","level":"info","event":"34  413045845ba375f3753131236936e3cdc9f9d5a5  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424172Z","level":"info","event":"35  dafd32d355cf701ae30214cd5b1c9828a3a6356a  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424206Z","level":"info","event":"36  253c398f2a423e45d4f97f3d4141e5f39535a4dc  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424240Z","level":"info","event":"37  94eaa865a47e2a54ee550bdb4808ca67c1247d4e  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424273Z","level":"info","event":"38  06d1484cbb43c076b791197bc761d9eec574d686  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424307Z","level":"info","event":"39  c215bdc90176a48a2f0f7d44e49f8fde9669c854  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424342Z","level":"info","event":"40  70375982a5d7634317dd7ff3eeebc972cf70cc44  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424382Z","level":"info","event":"41  0f8d51c59c95327bd5d8615164f22c047e0f9919  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424419Z","level":"info","event":"42  941e27a3062feecd202a32f3a489beffc76d9de9  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424460Z","level":"info","event":"43  6b276dfb8d0eea1547d5b5222753af1df59686b2  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424503Z","level":"info","event":"44  85b3d7bc2f464f3488b0659d507c8a93e59e370e  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424537Z","level":"info","event":"45  47dd3648799bef0cd281e574b3fd6058c541e2ce  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424572Z","level":"info","event":"46  6b00aaa66b4b99a3aa7cb9c48e1a5ff3f10ef8c0  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424606Z","level":"info","event":"47  56f32d6c1cc771e92091a45e29703425d01a320f  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424640Z","level":"info","event":"48  dd8eaa366e64ab8742e7d837bf09137ac2fc8a7a  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424674Z","level":"info","event":"49  76396b9b7a659839df96842aae46b31ce47f67db  MiPasajefy","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424709Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424749Z","level":"info","event":"                                  company_id  amount           status  \\","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424787Z","level":"info","event":"0   cbf1c8b09cd5b549416d49d220a40cbd317f952e    3.00           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424823Z","level":"info","event":"1   cbf1c8b09cd5b549416d49d220a40cbd317f952e    3.00  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424857Z","level":"info","event":"2   cbf1c8b09cd5b549416d49d220a40cbd317f952e    3.00           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424893Z","level":"info","event":"3   cbf1c8b09cd5b549416d49d220a40cbd317f952e  102.61             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424928Z","level":"info","event":"4   cbf1c8b09cd5b549416d49d220a40cbd317f952e  184.49             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424964Z","level":"info","event":"5   cbf1c8b09cd5b549416d49d220a40cbd317f952e   85.27  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.424999Z","level":"info","event":"6   cbf1c8b09cd5b549416d49d220a40cbd317f952e   41.00   pre_authorized","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425034Z","level":"info","event":"7   cbf1c8b09cd5b549416d49d220a40cbd317f952e    3.00  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425072Z","level":"info","event":"8   cbf1c8b09cd5b549416d49d220a40cbd317f952e   41.61           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425107Z","level":"info","event":"9   cbf1c8b09cd5b549416d49d220a40cbd317f952e  115.84             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425142Z","level":"info","event":"10  cbf1c8b09cd5b549416d49d220a40cbd317f952e    3.00           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425176Z","level":"info","event":"11  cbf1c8b09cd5b549416d49d220a40cbd317f952e   81.33             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425210Z","level":"info","event":"12  cbf1c8b09cd5b549416d49d220a40cbd317f952e  230.27             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425292Z","level":"info","event":"13  cbf1c8b09cd5b549416d49d220a40cbd317f952e  117.88             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425338Z","level":"info","event":"14  cbf1c8b09cd5b549416d49d220a40cbd317f952e   73.76           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425376Z","level":"info","event":"15  cbf1c8b09cd5b549416d49d220a40cbd317f952e  364.46  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425419Z","level":"info","event":"16  cbf1c8b09cd5b549416d49d220a40cbd317f952e    3.00  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425469Z","level":"info","event":"17  cbf1c8b09cd5b549416d49d220a40cbd317f952e   64.36             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425516Z","level":"info","event":"18  cbf1c8b09cd5b549416d49d220a40cbd317f952e  166.65  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425553Z","level":"info","event":"19  cbf1c8b09cd5b549416d49d220a40cbd317f952e   42.20           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425588Z","level":"info","event":"20  cbf1c8b09cd5b549416d49d220a40cbd317f952e   41.82             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425623Z","level":"info","event":"21  cbf1c8b09cd5b549416d49d220a40cbd317f952e  163.49             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425658Z","level":"info","event":"22  cbf1c8b09cd5b549416d49d220a40cbd317f952e  188.70             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425693Z","level":"info","event":"23  cbf1c8b09cd5b549416d49d220a40cbd317f952e   59.75           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425728Z","level":"info","event":"24  cbf1c8b09cd5b549416d49d220a40cbd317f952e  102.98             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425763Z","level":"info","event":"25  cbf1c8b09cd5b549416d49d220a40cbd317f952e  158.33             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425798Z","level":"info","event":"26  cbf1c8b09cd5b549416d49d220a40cbd317f952e  152.34  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425833Z","level":"info","event":"27  cbf1c8b09cd5b549416d49d220a40cbd317f952e   51.44             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425868Z","level":"info","event":"28  cbf1c8b09cd5b549416d49d220a40cbd317f952e   49.47             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425902Z","level":"info","event":"29  cbf1c8b09cd5b549416d49d220a40cbd317f952e    3.00  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425939Z","level":"info","event":"30  cbf1c8b09cd5b549416d49d220a40cbd317f952e   16.47             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.425975Z","level":"info","event":"31  cbf1c8b09cd5b549416d49d220a40cbd317f952e  204.41             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426009Z","level":"info","event":"32  cbf1c8b09cd5b549416d49d220a40cbd317f952e    3.00  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426045Z","level":"info","event":"33  cbf1c8b09cd5b549416d49d220a40cbd317f952e   23.06             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426080Z","level":"info","event":"34  cbf1c8b09cd5b549416d49d220a40cbd317f952e  133.08  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426114Z","level":"info","event":"35  cbf1c8b09cd5b549416d49d220a40cbd317f952e  300.09           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426149Z","level":"info","event":"36  cbf1c8b09cd5b549416d49d220a40cbd317f952e   89.56             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426196Z","level":"info","event":"37  cbf1c8b09cd5b549416d49d220a40cbd317f952e   78.83           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426243Z","level":"info","event":"38  cbf1c8b09cd5b549416d49d220a40cbd317f952e    3.00           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426283Z","level":"info","event":"39  cbf1c8b09cd5b549416d49d220a40cbd317f952e   34.69             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426323Z","level":"info","event":"40  cbf1c8b09cd5b549416d49d220a40cbd317f952e   62.03           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426374Z","level":"info","event":"41  cbf1c8b09cd5b549416d49d220a40cbd317f952e   55.75             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426411Z","level":"info","event":"42  cbf1c8b09cd5b549416d49d220a40cbd317f952e   50.32  pending_payment","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426446Z","level":"info","event":"43  cbf1c8b09cd5b549416d49d220a40cbd317f952e   73.22           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426498Z","level":"info","event":"44  cbf1c8b09cd5b549416d49d220a40cbd317f952e    3.00           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426533Z","level":"info","event":"45  cbf1c8b09cd5b549416d49d220a40cbd317f952e   29.06             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426568Z","level":"info","event":"46  cbf1c8b09cd5b549416d49d220a40cbd317f952e  239.17             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426602Z","level":"info","event":"47  cbf1c8b09cd5b549416d49d220a40cbd317f952e   21.42           voided","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426636Z","level":"info","event":"48  cbf1c8b09cd5b549416d49d220a40cbd317f952e  171.61             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426670Z","level":"info","event":"49  cbf1c8b09cd5b549416d49d220a40cbd317f952e   61.23             paid","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426705Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426740Z","level":"info","event":"    created_at     paid_at","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426775Z","level":"info","event":"0   2019-03-19         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426809Z","level":"info","event":"1   2019-05-06         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426844Z","level":"info","event":"2   2019-02-22         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426879Z","level":"info","event":"3   2019-02-27  2019-02-27","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426912Z","level":"info","event":"4   2019-02-05  2019-02-05","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426947Z","level":"info","event":"5   2019-01-04         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.426980Z","level":"info","event":"6   2019-05-04         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427021Z","level":"info","event":"7   2019-01-23         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427054Z","level":"info","event":"8   2019-05-03         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427088Z","level":"info","event":"9   2019-01-22  2019-01-22","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427122Z","level":"info","event":"10  2019-03-02         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427156Z","level":"info","event":"11  2019-01-12  2019-01-12","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427189Z","level":"info","event":"12  2019-03-29  2019-03-29","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427225Z","level":"info","event":"13  2019-05-18  2019-05-18","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427261Z","level":"info","event":"14  2019-01-10         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427295Z","level":"info","event":"15  2019-01-11         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427330Z","level":"info","event":"16  2019-02-16         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427364Z","level":"info","event":"17  2019-04-16  2019-04-16","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427401Z","level":"info","event":"18  2019-05-10         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427435Z","level":"info","event":"19  2019-01-03         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427489Z","level":"info","event":"20  2019-03-04  2019-03-04","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427527Z","level":"info","event":"21  2019-04-03  2019-04-03","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427562Z","level":"info","event":"22  2019-05-10  2019-05-10","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427596Z","level":"info","event":"23  2019-01-15         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427632Z","level":"info","event":"24  2019-01-02  2019-01-02","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427666Z","level":"info","event":"25  2019-04-11  2019-04-11","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427699Z","level":"info","event":"26  2019-03-01         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427732Z","level":"info","event":"27  2019-03-01  2019-03-01","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427766Z","level":"info","event":"28  2019-01-02  2019-01-02","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427802Z","level":"info","event":"29  2019-03-08         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427836Z","level":"info","event":"30  2019-03-10  2019-03-10","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427872Z","level":"info","event":"31  2019-02-07  2019-02-07","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427906Z","level":"info","event":"32  2019-03-14         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427940Z","level":"info","event":"33  2019-03-15  2019-03-15","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.427973Z","level":"info","event":"34  2019-03-22         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428006Z","level":"info","event":"35  2019-03-22         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428039Z","level":"info","event":"36  2019-04-29  2019-04-29","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428072Z","level":"info","event":"37  2019-05-02         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428106Z","level":"info","event":"38  2019-05-12         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428139Z","level":"info","event":"39  2019-04-02  2019-04-02","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428173Z","level":"info","event":"40  2019-03-14         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428207Z","level":"info","event":"41  2019-03-15  2019-03-15","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428241Z","level":"info","event":"42  2019-05-05         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428274Z","level":"info","event":"43  2019-04-12         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428308Z","level":"info","event":"44  2019-01-16         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428341Z","level":"info","event":"45  2019-03-20  2019-03-20","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.428374Z","level":"info","event":"46  2019-05-15  2019-05-15","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.423076Z","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.decorators.python._PythonDecoratedOperator","filename":"python.py","lineno":229}
+{"timestamp":"2026-05-27T17:32:55.440062Z","level":"info","event":"47  2019-05-09         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.440164Z","level":"info","event":"48  2019-04-04  2019-04-04","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:32:55.440224Z","level":"info","event":"49  2019-01-08  2019-01-08","logger":"task.stdout"}

@@ -1,0 +1,57 @@
+{"timestamp":"2026-05-27T19:03:38.717813Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":209}
+{"timestamp":"2026-05-27T19:03:38.718376Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/dag_etl_test.py","logger":"airflow.dag_processing.dagbag.BundleDagBag","filename":"dagbag.py","lineno":469}
+{"timestamp":"2026-05-27T19:03:39.034808Z","level":"warning","event":"The `airflow.operators.empty.EmptyOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.empty.EmptyOperator'`.","category":"UserWarning","filename":"/opt/airflow/dags/dag_etl_test.py","lineno":6,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T19:03:39.034925Z","level":"warning","event":"The `airflow.decorators.task` attribute is deprecated. Please use `'airflow.sdk.task'`.","category":"UserWarning","filename":"/opt/airflow/dags/dag_etl_test.py","lineno":7,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T19:03:39.058461Z","level":"info","event":"AWS Connection (conn_id='***_storage', conn_type='aws') credentials retrieved from login and password.","logger":"airflow.providers.amazon.aws.utils.connection_wrapper.AwsConnectionWrapper","filename":"connection_wrapper.py","lineno":331}
+{"timestamp":"2026-05-27T19:03:39.066146Z","level":"warning","event":"ProvidersManager.hooks is deprecated. Use ProvidersManagerTaskRuntime.hooks from task-sdk instead.","category":"DeprecatedImportWarning","filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/providers/amazon/aws/hooks/base_aws.py","lineno":520,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T19:03:39.382353Z","level":"info","event":"Archivos en el bucket: ['data/data_muestra.csv', 'data/data_prueba_tecnica.csv']","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.486179Z","level":"info","event":"Archivo procesado exitosamente. Filas: 1001, Columnas: 7","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.486322Z","level":"info","event":"Diagnóstico rápido","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490111Z","level":"info","event":"<class 'pandas.core.frame.DataFrame'>","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490200Z","level":"info","event":"RangeIndex: 1001 entries, 0 to 1000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490270Z","level":"info","event":"Data columns (total 7 columns):","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490325Z","level":"info","event":" #   Column      Non-Null Count  Dtype","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490377Z","level":"info","event":"---  ------      --------------  -----","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490439Z","level":"info","event":" 0   id          1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490510Z","level":"info","event":" 1   name        1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490557Z","level":"info","event":" 2   company_id  1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490602Z","level":"info","event":" 3   amount      1001 non-null   float64","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490647Z","level":"info","event":" 4   status      1001 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490692Z","level":"info","event":" 5   created_at  1001 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490738Z","level":"info","event":" 6   paid_at     573 non-null    object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490782Z","level":"info","event":"dtypes: float64(1), object(6)","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490828Z","level":"info","event":"memory usage: 54.9+ KB","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490871Z","level":"info","event":"Tipos de datos y conteo de no-nulos: None","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.490979Z","level":"info","event":"Cantidad de valores faltantes por columna: id              1","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.491062Z","level":"info","event":"name            1","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.491112Z","level":"info","event":"company_id      1","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.491172Z","level":"info","event":"amount          0","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.491214Z","level":"info","event":"status          0","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.491257Z","level":"info","event":"created_at      0","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.491301Z","level":"info","event":"paid_at       428","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.491344Z","level":"info","event":"dtype: int64","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.494859Z","level":"info","event":"Estadísticas básicas para detectar outliers numéricos:              amount","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.494948Z","level":"info","event":"count   1001.000000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.495007Z","level":"info","event":"mean     302.409560","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.495058Z","level":"info","event":"std     3022.451109","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.495109Z","level":"info","event":"min        3.000000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.495157Z","level":"info","event":"25%       28.010000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.495203Z","level":"info","event":"50%       58.740000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.495248Z","level":"info","event":"75%      109.400000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.495291Z","level":"info","event":"max    83983.000000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501021Z","level":"info","event":"<class 'pandas.core.frame.DataFrame'>","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501110Z","level":"info","event":"RangeIndex: 1001 entries, 0 to 1000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501169Z","level":"info","event":"Data columns (total 7 columns):","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501221Z","level":"info","event":" #   Column      Non-Null Count  Dtype","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501269Z","level":"info","event":"---  ------      --------------  -----","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501318Z","level":"info","event":" 0   id          1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501364Z","level":"info","event":" 1   name        1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501410Z","level":"info","event":" 2   company_id  1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501463Z","level":"info","event":" 3   amount      1001 non-null   float64","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501511Z","level":"info","event":" 4   status      1001 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501556Z","level":"info","event":" 5   created_at  998 non-null    datetime64[ns]","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501601Z","level":"info","event":" 6   paid_at     573 non-null    datetime64[ns]","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501645Z","level":"info","event":"dtypes: datetime64[ns](2), float64(1), object(4)","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501689Z","level":"info","event":"memory usage: 54.9+ KB","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.501734Z","level":"info","event":"DATAFRAME INFO: None","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:03:39.512268Z","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.decorators.python._PythonDecoratedOperator","filename":"python.py","lineno":229}

@@ -1,0 +1,57 @@
+{"timestamp":"2026-05-27T19:34:02.609561Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":209}
+{"timestamp":"2026-05-27T19:34:02.610124Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/dag_etl_test.py","logger":"airflow.dag_processing.dagbag.BundleDagBag","filename":"dagbag.py","lineno":469}
+{"timestamp":"2026-05-27T19:34:02.926161Z","level":"warning","event":"The `airflow.operators.empty.EmptyOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.empty.EmptyOperator'`.","category":"UserWarning","filename":"/opt/airflow/dags/dag_etl_test.py","lineno":7,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T19:34:02.926269Z","level":"warning","event":"The `airflow.decorators.task` attribute is deprecated. Please use `'airflow.sdk.task'`.","category":"UserWarning","filename":"/opt/airflow/dags/dag_etl_test.py","lineno":8,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T19:34:02.953828Z","level":"info","event":"AWS Connection (conn_id='***_storage', conn_type='aws') credentials retrieved from login and password.","logger":"airflow.providers.amazon.aws.utils.connection_wrapper.AwsConnectionWrapper","filename":"connection_wrapper.py","lineno":331}
+{"timestamp":"2026-05-27T19:34:02.961585Z","level":"warning","event":"ProvidersManager.hooks is deprecated. Use ProvidersManagerTaskRuntime.hooks from task-sdk instead.","category":"DeprecatedImportWarning","filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/providers/amazon/aws/hooks/base_aws.py","lineno":520,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T19:34:03.262407Z","level":"info","event":"Archivos en el bucket: ['data/data_muestra.csv', 'data/data_prueba_tecnica.csv']","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.382077Z","level":"info","event":"Archivo procesado exitosamente. Filas: 1001, Columnas: 7","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.382233Z","level":"info","event":"Diagnóstico rápido","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.385755Z","level":"info","event":"<class 'pandas.core.frame.DataFrame'>","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.385855Z","level":"info","event":"RangeIndex: 1001 entries, 0 to 1000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.385924Z","level":"info","event":"Data columns (total 7 columns):","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.385987Z","level":"info","event":" #   Column      Non-Null Count  Dtype","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386046Z","level":"info","event":"---  ------      --------------  -----","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386104Z","level":"info","event":" 0   id          1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386160Z","level":"info","event":" 1   name        1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386213Z","level":"info","event":" 2   company_id  1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386267Z","level":"info","event":" 3   amount      1001 non-null   float64","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386319Z","level":"info","event":" 4   status      1001 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386371Z","level":"info","event":" 5   created_at  1001 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386422Z","level":"info","event":" 6   paid_at     573 non-null    object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386488Z","level":"info","event":"dtypes: float64(1), object(6)","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386542Z","level":"info","event":"memory usage: 54.9+ KB","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386606Z","level":"info","event":"Tipos de datos y conteo de no-nulos: None","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386724Z","level":"info","event":"Cantidad de valores faltantes por columna: id              1","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386804Z","level":"info","event":"name            1","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386862Z","level":"info","event":"company_id      1","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386915Z","level":"info","event":"amount          0","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.386972Z","level":"info","event":"status          0","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.387034Z","level":"info","event":"created_at      0","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.387085Z","level":"info","event":"paid_at       428","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.387136Z","level":"info","event":"dtype: int64","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.390623Z","level":"info","event":"Estadísticas básicas para detectar outliers numéricos:              amount","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.390739Z","level":"info","event":"count   1001.000000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.390809Z","level":"info","event":"mean     302.409560","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.390870Z","level":"info","event":"std     3022.451109","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.390925Z","level":"info","event":"min        3.000000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.390981Z","level":"info","event":"25%       28.010000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.391036Z","level":"info","event":"50%       58.740000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.391095Z","level":"info","event":"75%      109.400000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.391152Z","level":"info","event":"max    83983.000000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.396773Z","level":"info","event":"<class 'pandas.core.frame.DataFrame'>","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.396888Z","level":"info","event":"RangeIndex: 1001 entries, 0 to 1000","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.396950Z","level":"info","event":"Data columns (total 7 columns):","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397004Z","level":"info","event":" #   Column      Non-Null Count  Dtype","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397055Z","level":"info","event":"---  ------      --------------  -----","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397105Z","level":"info","event":" 0   id          1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397151Z","level":"info","event":" 1   name        1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397199Z","level":"info","event":" 2   company_id  1000 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397245Z","level":"info","event":" 3   amount      1001 non-null   float64","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397291Z","level":"info","event":" 4   status      1001 non-null   object","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397337Z","level":"info","event":" 5   created_at  998 non-null    datetime64[ns]","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397383Z","level":"info","event":" 6   paid_at     573 non-null    datetime64[ns]","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397428Z","level":"info","event":"dtypes: datetime64[ns](2), float64(1), object(4)","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397483Z","level":"info","event":"memory usage: 54.9+ KB","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:03.397531Z","level":"info","event":"DATAFRAME INFO: None","logger":"task.stdout"}
+{"timestamp":"2026-05-27T19:34:05.408460Z","level":"error","event":"Task failed with exception","logger":"task","filename":"task_runner.py","lineno":1347,"error_detail":[{"exc_type":"ImportError","exc_value":"Airflow FS S3 protocol requires the s3fs library, but it is not installed as it requiresaiobotocore. Please install the s3 protocol support library by running: pip install apache-airflow-providers-amazon[s3fs]","exc_notes":[],"syntax_error":null,"is_cause":false,"frames":[{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/sdk/execution_time/task_runner.py","lineno":1263,"name":"run"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/sdk/execution_time/task_runner.py","lineno":1678,"name":"_execute_task"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/sdk/bases/operator.py","lineno":443,"name":"wrapper"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/sdk/bases/decorator.py","lineno":397,"name":"execute"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/sdk/bases/operator.py","lineno":443,"name":"wrapper"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/providers/standard/operators/python.py","lineno":227,"name":"execute"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/providers/standard/operators/python.py","lineno":250,"name":"execute_callable"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/sdk/execution_time/callback_runner.py","lineno":97,"name":"run"},{"filename":"/opt/airflow/dags/dag_etl_test.py","lineno":107,"name":"leer_csv_desde_***"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/sdk/io/path.py","lineno":223,"name":"open"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/sdk/io/path.py","lineno":178,"name":"fs"},{"filename":"/usr/python/lib/python3.13/functools.py","lineno":1025,"name":"__get__"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/sdk/io/store.py","lineno":63,"name":"fs"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/sdk/io/fs.py","lineno":105,"name":"get_fs"},{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/providers/amazon/aws/fs/s3.py","lineno":53,"name":"get_fs"}],"is_group":false,"exceptions":[]},{"exc_type":"ModuleNotFoundError","exc_value":"No module named 's3fs'","exc_notes":[],"syntax_error":null,"is_cause":false,"frames":[{"filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/providers/amazon/aws/fs/s3.py","lineno":51,"name":"get_fs"}],"is_group":false,"exceptions":[]}]}

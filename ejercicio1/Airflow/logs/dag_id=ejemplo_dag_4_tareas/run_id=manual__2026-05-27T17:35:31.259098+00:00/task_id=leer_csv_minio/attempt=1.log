@@ -1,0 +1,62 @@
+{"timestamp":"2026-05-27T17:35:34.606851Z","level":"info","event":"DAG bundles loaded: dags-folder","logger":"airflow.dag_processing.bundles.manager.DagBundlesManager","filename":"manager.py","lineno":209}
+{"timestamp":"2026-05-27T17:35:34.607442Z","level":"info","event":"Filling up the DagBag from /opt/airflow/dags/dag_etl_test.py","logger":"airflow.dag_processing.dagbag.BundleDagBag","filename":"dagbag.py","lineno":469}
+{"timestamp":"2026-05-27T17:35:34.934165Z","level":"warning","event":"The `airflow.operators.empty.EmptyOperator` attribute is deprecated. Please use `'airflow.providers.standard.operators.empty.EmptyOperator'`.","category":"UserWarning","filename":"/opt/airflow/dags/dag_etl_test.py","lineno":6,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T17:35:34.934308Z","level":"warning","event":"The `airflow.decorators.task` attribute is deprecated. Please use `'airflow.sdk.task'`.","category":"UserWarning","filename":"/opt/airflow/dags/dag_etl_test.py","lineno":7,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T17:35:34.958423Z","level":"info","event":"AWS Connection (conn_id='***_storage', conn_type='aws') credentials retrieved from login and password.","logger":"airflow.providers.amazon.aws.utils.connection_wrapper.AwsConnectionWrapper","filename":"connection_wrapper.py","lineno":331}
+{"timestamp":"2026-05-27T17:35:34.966060Z","level":"warning","event":"ProvidersManager.hooks is deprecated. Use ProvidersManagerTaskRuntime.hooks from task-sdk instead.","category":"DeprecatedImportWarning","filename":"/home/airflow/.local/lib/python3.13/site-packages/airflow/providers/amazon/aws/hooks/base_aws.py","lineno":520,"logger":"py.warnings"}
+{"timestamp":"2026-05-27T17:35:35.265481Z","level":"info","event":"Archivos en el bucket: ['data/data_muestra.csv', 'data/data_prueba_tecnica.csv']","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.378851Z","level":"info","event":"Archivo procesado exitosamente. Filas: 50, Columnas: 7","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394112Z","level":"info","event":"                                          id  ...     paid_at","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394227Z","level":"info","event":"0   48ba4bdbfb56ceebb32f2bd0263e759be942af3d  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394297Z","level":"info","event":"1   05fc6f5ac66b6ee7e4253aa5d0c2299eb47aaaf4  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394371Z","level":"info","event":"2   2cdce231c1fc6a2061bfa2f1d978351fe217245d  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394419Z","level":"info","event":"3   81633ba310a50b673efd469c37139576982901aa  ...  2019-02-27","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394502Z","level":"info","event":"4   6ccfc4c24e788e4bca448df343698782db6b0c0b  ...  2019-02-05","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394558Z","level":"info","event":"5   b25f2ff15c24ea881e676be772f4dd99891ad188  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394632Z","level":"info","event":"6   4f9db76960dcdf6b7e2d7d71b11519e49d7b1179  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394677Z","level":"info","event":"7   7e96211c7d133a6227e809abc3d3ab18992b36b9  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394731Z","level":"info","event":"8   6ee515d5f0a1995731fb31053278e9700d67947c  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394784Z","level":"info","event":"9   cdf1a7a6f5c9b0db543371f9e4bd127b451c09c9  ...  2019-01-22","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394840Z","level":"info","event":"10  5083f2fc28d4c63bcef7184ca4ee6e8527a9e60d  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394881Z","level":"info","event":"11  90820e39fa6aa60555edb6855a6c83e59a9ba271  ...  2019-01-12","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394924Z","level":"info","event":"12  315fb708b31d2b98da63db63481550cf01087c75  ...  2019-03-29","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394978Z","level":"info","event":"13  796fc616b760b45ebe0dc5cfc0b170d62e9320c2  ...  2019-05-18","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395026Z","level":"info","event":"14  221b7af73b7901a32c526553e40a289724dd023a  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395070Z","level":"info","event":"15  8ff04de2a96c9c05df0d9bd87009ba6649f7c424  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395114Z","level":"info","event":"16  78bc9783831c398cbc03b896eb620fcab9375489  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395169Z","level":"info","event":"17  32149975c2b32f5fa50b93a25c91cf067848e65e  ...  2019-04-16","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395211Z","level":"info","event":"18  798166c4cd9d464ab5e83b4152cfd191424bb34d  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395245Z","level":"info","event":"19  1a261c012b286d9abcc91c83769dbf91a31f7276  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395280Z","level":"info","event":"20  9778228bbb5ef7e2f5f7dac88b4fd533df4aa04a  ...  2019-03-04","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395315Z","level":"info","event":"21  0dca80440f819c7f3077d534e92a9634d66e279a  ...  2019-04-03","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395350Z","level":"info","event":"22  6a528f598c344398ce78afb995a2f52c82395f24  ...  2019-05-10","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395385Z","level":"info","event":"23  ab2beca2b1bb360e8e21c6c7d4ffd2c538d5e556  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395419Z","level":"info","event":"24  2f08a65c6e10505beae5a1cd544a45b1f46b6bb2  ...  2019-01-02","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395459Z","level":"info","event":"25  be79778857c376c2d7c4500edcfa7eb00ab9ca47  ...  2019-04-11","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395505Z","level":"info","event":"26  7515720474abd64ef9ab4e9aa6990cd50f59ed32  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395544Z","level":"info","event":"27  8e30aaeb7bd4400a333dfaaaca97e0b6df32985d  ...  2019-03-01","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395579Z","level":"info","event":"28  fc4c84b317ece0828e70be31af63f0e57f7ec76d  ...  2019-01-02","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395616Z","level":"info","event":"29  0e066d3752a543428d7dc81c537adaad7a4a4bca  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395651Z","level":"info","event":"30  7ce16fa25eecf4465993708f6be270d9fe68245d  ...  2019-03-10","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395686Z","level":"info","event":"31  b92339e9ff0ecc7e551939474b5a410238719d83  ...  2019-02-07","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395729Z","level":"info","event":"32  4e95db9854058e34950d6b05f187dc3bf7ff29eb  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395763Z","level":"info","event":"33  63276fa5b4b369647917687574c3a54d011de95d  ...  2019-03-15","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395805Z","level":"info","event":"34  413045845ba375f3753131236936e3cdc9f9d5a5  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395842Z","level":"info","event":"35  dafd32d355cf701ae30214cd5b1c9828a3a6356a  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395887Z","level":"info","event":"36  253c398f2a423e45d4f97f3d4141e5f39535a4dc  ...  2019-04-29","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395922Z","level":"info","event":"37  94eaa865a47e2a54ee550bdb4808ca67c1247d4e  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395956Z","level":"info","event":"38  06d1484cbb43c076b791197bc761d9eec574d686  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.395990Z","level":"info","event":"39  c215bdc90176a48a2f0f7d44e49f8fde9669c854  ...  2019-04-02","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396033Z","level":"info","event":"40  70375982a5d7634317dd7ff3eeebc972cf70cc44  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396083Z","level":"info","event":"41  0f8d51c59c95327bd5d8615164f22c047e0f9919  ...  2019-03-15","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396119Z","level":"info","event":"42  941e27a3062feecd202a32f3a489beffc76d9de9  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396154Z","level":"info","event":"43  6b276dfb8d0eea1547d5b5222753af1df59686b2  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396189Z","level":"info","event":"44  85b3d7bc2f464f3488b0659d507c8a93e59e370e  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396224Z","level":"info","event":"45  47dd3648799bef0cd281e574b3fd6058c541e2ce  ...  2019-03-20","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396258Z","level":"info","event":"46  6b00aaa66b4b99a3aa7cb9c48e1a5ff3f10ef8c0  ...  2019-05-15","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396292Z","level":"info","event":"47  56f32d6c1cc771e92091a45e29703425d01a320f  ...         NaN","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396326Z","level":"info","event":"48  dd8eaa366e64ab8742e7d837bf09137ac2fc8a7a  ...  2019-04-04","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396360Z","level":"info","event":"49  76396b9b7a659839df96842aae46b31ce47f67db  ...  2019-01-08","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396393Z","level":"info","event":"","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.396429Z","level":"info","event":"[50 rows x 7 columns]","logger":"task.stdout"}
+{"timestamp":"2026-05-27T17:35:35.394736Z","level":"info","event":"Done. Returned value was: None","logger":"airflow.task.operators.airflow.providers.standard.decorators.python._PythonDecoratedOperator","filename":"python.py","lineno":229}
