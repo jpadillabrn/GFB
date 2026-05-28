@@ -5,7 +5,7 @@ Repositorio de la prueba tecnica para la posición de Data Engineering en Banco 
 
 En el archivo **README.md** de cada ejercio se encuentra el detalle a la soulucion.
 
-[Ejercicio 1](../GFB/ejercicio1/README.md)
+[Ejercicio 1](./ejercicio1/README.md)
 
 
-[Ejercicio 2](../GFB/ejercicio2/README.md)
+[Ejercicio 2](./ejercicio2/README.md)
