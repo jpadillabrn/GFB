@@ -2,12 +2,11 @@
 DAG: ejemplo_dag_4_tareas (Refactorizado con diagnóstico y transformación separados)
 =====================================================================================
 Flujo:
-1. Pasos placeholder (extracción y transformación).
-2. Diagnóstico del CSV en MinIO → retorna contenido crudo.
-3. Transformación del CSV (nulos, tipos) → retorna JSON limpio.
-4. Escritura del DataFrame a Parquet en bucket bronze.
-5. Creación de esquema y tabla externa en Trino.
-6. Consulta de validación.
+1. Diagnóstico del CSV en MinIO → retorna contenido crudo.
+2. Transformación del CSV (nulos, tipos) → retorna JSON limpio.
+3. Escritura del DataFrame a Parquet en bucket bronze.
+4. Creación de esquema y tabla externa en Trino.
+5. Consulta de validación.
 """
 
 from datetime import datetime, timedelta
@@ -53,7 +52,7 @@ default_args = {
 with DAG(
     dag_id="dag_etl_engineer_challenge",
     default_args=default_args,
-    description="Pipeline modular con diagnóstico y transformación separados",
+    description="DAG Prueba Tecnica ETL",
     schedule=None,
     start_date=datetime(2026, 5, 27),
     catchup=False,
