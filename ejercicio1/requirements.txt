@@ -1,2 +1,4 @@
 s3fs
 apache-airflow-providers-trino
+pyspark==3.5.1 
+apache-airflow-providers-apache-spark

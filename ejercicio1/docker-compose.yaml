@@ -75,6 +75,7 @@ x-airflow-common:
     # The following line can be used to set a custom config file, stored in the local config folder
     AIRFLOW_CONFIG: '/opt/airflow/config/airflow.cfg'
     SPARK_MASTER: spark://spark-master:7077
+    AIRFLOW__CORE__TEST_CONNECTION: Enabled
   volumes:
     - ./Airflow/dags:/opt/airflow/dags
     - ./Airflow/logs:/opt/airflow/logs
@@ -392,21 +393,21 @@ services:
 
   # SPARK
   spark-master:
-    image: bitnami/spark:3.5
+    #image: apache/spark:3.5.1-python3
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
     container_name: spark-master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
     environment:
-      - SPARK_MODE=master
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
+      - SPARK_MASTER_HOST=spark-master
       - SPARK_MASTER_PORT=7077
       - SPARK_MASTER_WEBUI_PORT=8080
     ports:
-      - "8081:8080"   # UI de Spark Master (mapeado a 8081 para no chocar con el API server)
-      - "7077:7077"   # Puerto de comunicación del master
+      - "8081:8080"   # UI
+      - "7077:7077"   # Comunicación
     volumes:
-      - spark-data:/bitnami/spark/data
+      - ./Spark/spark-data:/opt/spark/data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/"]
       interval: 10s
@@ -415,26 +416,23 @@ services:
     restart: unless-stopped
 
   spark-worker:
-    image: bitnami/spark:3.5
+    #image: apache/spark:3.5.1-python3
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
     container_name: spark-worker
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=2G          # Ajusta según tus recursos
+      - SPARK_WORKER_MEMORY=2G
       - SPARK_WORKER_CORES=2
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
       - SPARK_WORKER_WEBUI_PORT=8081
     ports:
-      - "8082:8081"   # UI del Worker (mapeado a 8082)
+      - "8082:8081"   # UI worker
     depends_on:
       - spark-master
     volumes:
-      - spark-data:/bitnami/spark/data
+      - ./Spark/spark-data:/opt/spark/data
     restart: unless-stopped
 
 volumes:
   postgres-db-volume:
-  spark-data:
