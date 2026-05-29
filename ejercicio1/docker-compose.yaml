@@ -74,6 +74,8 @@ x-airflow-common:
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- polars trino}
     # The following line can be used to set a custom config file, stored in the local config folder
     AIRFLOW_CONFIG: '/opt/airflow/config/airflow.cfg'
+    SPARK_MASTER: spark://spark-master:7077
+    AIRFLOW__CORE__TEST_CONNECTION: Enabled
   volumes:
     - ./Airflow/dags:/opt/airflow/dags
     - ./Airflow/logs:/opt/airflow/logs
@@ -388,6 +390,49 @@ services:
     volumes:
       - ./Trino/etc/catalog/bronze.properties:/etc/trino/catalog/bronze.properties
       - ./Trino/etc/config.properties:/etc/trino/config.properties
+
+  # SPARK
+  spark-master:
+    #image: apache/spark:3.5.1-python3
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
+    container_name: spark-master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    environment:
+      - SPARK_MASTER_HOST=spark-master
+      - SPARK_MASTER_PORT=7077
+      - SPARK_MASTER_WEBUI_PORT=8080
+    ports:
+      - "8081:8080"   # UI
+      - "7077:7077"   # Comunicación
+    volumes:
+      - ./Spark/spark-data:/opt/spark/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  spark-worker:
+    #image: apache/spark:3.5.1-python3
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
+    container_name: spark-worker
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    environment:
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_WEBUI_PORT=8081
+    ports:
+      - "8082:8081"   # UI worker
+    depends_on:
+      - spark-master
+    volumes:
+      - ./Spark/spark-data:/opt/spark/data
+    restart: unless-stopped
 
 volumes:
   postgres-db-volume:
