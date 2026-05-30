@@ -76,6 +76,7 @@ x-airflow-common:
     AIRFLOW_CONFIG: '/opt/airflow/config/airflow.cfg'
     SPARK_MASTER: spark://spark-master:7077
     AIRFLOW__CORE__TEST_CONNECTION: Enabled
+    SPARK_REMOTE: 'sc://spark-master:7077'
   volumes:
     - ./Airflow/dags:/opt/airflow/dags
     - ./Airflow/logs:/opt/airflow/logs

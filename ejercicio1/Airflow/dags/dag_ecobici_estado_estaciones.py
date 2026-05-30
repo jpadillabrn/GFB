@@ -7,9 +7,14 @@ siguiendo principios de diseño SOLID y decoupling de configuración.
 
 from datetime import datetime, timedelta
 from typing import Any, Dict, List
-import requests  # Podrías usar HttpHook de Airflow, aquí usamos abstracción pura
-from airflow.decorators import dag, task
+import requests  
+import os
+
+from airflow.sdk import dag , task
 from airflow.providers.standard.operators.empty import EmptyOperator
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, to_date
+from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 
 # =============================================================================
 # CONFIGURACIÓN (SOLID: SRP - Aislamiento de Configuración)
@@ -22,6 +27,11 @@ DEFAULT_ARGS: Dict[str, Any] = {
     "retries": 1,
     "retry_delay": timedelta(minutes=3),
 }
+
+# Configuración de infraestructura (MinIO)
+MINIO_BUCKET_URL = "s3a://bck-bronze/ecobici"
+
+os.environ["SPARK_REMOTE"] = "sc://spark-master:7077" # O usar .option("spark.remote", "...")
 
 
 # =============================================================================
@@ -91,6 +101,44 @@ class StationDataTransformer:
         return cleaned_stations
 
 
+class SparkParquetWriter:
+    """
+    Abstracción de almacenamiento en PySpark. 
+    Se encarga de interactuar con el ecosistema Spark y escribir hacia MinIO.
+    """
+    
+    def __init__(self, target_path: str):
+        self.target_path = target_path
+        # Nota: En entornos productivos, los parámetros de S3A se leen 
+        # dinámicamente desde el hook de conexión de Airflow.
+        self.spark = SparkSession.builder \
+            .appName("Airflow-MinIO-Writer") \
+            .config("spark.hadoop.fs.s3a.endpoint", "http://minio:9000") \
+            .config("spark.hadoop.fs.s3a.access.key", "minio") \
+            .config("spark.hadoop.fs.s3a.secret.key", "minio1234") \
+            .config("spark.hadoop.fs.s3a.path.style.access", "true") \
+            .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
+            .getOrCreate()
+
+    def write_append_single_file(self, data: List[Dict[str, Any]]) -> None:
+        """Convierte los datos a DataFrame, genera la partición y escribe un único archivo."""
+        if not data:
+            return
+
+        # 1. Crear DataFrame de Spark
+        df = self.spark.createDataFrame(data)
+
+        # 2. Crear columna de partición basada exclusivamente en la fecha (sin hora)
+        df_with_partition = df.withColumn("fecha_reporte", to_date(col("last_reported_at")))
+
+        # 3. Coalesce(1) asegura un único archivo Parquet por partición física.
+        #    Mode("append") añade el archivo a la ruta sin sobreescribir los históricos.
+        df_with_partition.coalesce(1) \
+            .write \
+            .mode("append") \
+            .partitionBy("fecha_reporte") \
+            .parquet(self.target_path)
+
 
 # =============================================================================
 # DEFINICIÓN DEL DAG
@@ -143,16 +191,26 @@ def mi_pipeline_modular():
         # Inyección implícita del servicio de transformación
         datos_limpios = StationDataTransformer.clean_and_transform(datos_crudos)
         return datos_limpios
-
+    
+    # -------------------------------------------------------------------------
+    # Tarea 4: Guardar en MinIO con PySpark
+    # -------------------------------------------------------------------------
+    @task(task_id="guardar_en_minio")
+    def guardar_en_minio(datos_limpios: List[Dict[str, Any]]) -> None:
+        """Instancia el escritor de Spark y ejecuta la persistencia."""
+        writer = SparkParquetWriter(target_path=MINIO_BUCKET_URL)
+        writer.write_append_single_file(data=datos_limpios)
+    
     # Instanciamos la tarea TaskFlow
     datos_extraidos = extraer_datos()
     payload_limpio = limpiar_datos(datos_crudos=datos_extraidos)
+    guardado_final = guardar_en_minio(datos_limpios=payload_limpio)
 
     # -------------------------------------------------------------------------
     # FLUJO DE DEPENDENCIAS
     # -------------------------------------------------------------------------
     # Conectamos el EmptyOperator con la tarea TaskFlow
-    inicio >> datos_extraidos >> payload_limpio
+    inicio >> datos_extraidos >> payload_limpio >> guardado_final
 
 # Instanciación del flujo
 dag_instanciado = mi_pipeline_modular()
