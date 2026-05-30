@@ -297,6 +297,176 @@ En este DAG logre desarrollar hasta la tarea de limpieza de datos, en la tarea p
 
 
 
+### ERROR `[CONNECT_URL_NOT_SET]`  
+
+La URL `spark://spark-master:7077` **no es válida** para una sesión de **Spark Connect**.
+
+El error `[CONNECT_URL_NOT_SET]` ocurre específicamente porque el modo **Spark Connect**, requiere un protocolo y formato de URL diferentes a los del Spark tradicional.
+
+## Diferencias Clave de Protocolo
+
+### 1. Spark Connect 
+Si tu código utiliza `.remote()` o la variable `SPARK_REMOTE`, **debes** usar el protocolo `sc://`.
+*   **Formato válido:** `sc://host:port`
+*   **Ejemplo correcto:** `sc://spark-master:15002`
+*   **Puerto por defecto:** 15002
+
+### 2. Spark Tradicional (Standalone/Cluster)
+El protocolo `spark://` se utiliza exclusivamente para conexiones de cluster tradicionales (Standalone) configuradas mediante `.master()`.
+*   **Formato válido:** `spark://host:port`
+*   **Ejemplo:** `spark://spark-master:7077`
+*   **Incompatibilidad:** No funcionará con `.remote()`.
+
+## Solución
+
+Hay dos opciones dependiendo de la arquitectura:
+
+**Opción A: Usar Spark Connect (Recomendado para clientes remotos)**
+Cambia el protocolo de `spark://` a `sc://` y asegúrate de incluir el puerto (generalmente 15002).
+```python
+spark = SparkSession.builder.remote("sc://spark-master:15002").getOrCreate()
+```
+
+**Opción B: Usar Spark Tradicional**
+Si tu servidor no tiene habilitado el servicio Spark Connect, debes cambiar tu código para usar `.master()` en lugar de `.remote()`.
+```python
+spark = SparkSession.builder.master("spark://spark-master:7077").getOrCreate()
+```
 
 
-|
+## Validar si la conexión `sc://localhost:15002` está funcionando correctamente.
+
+El método más fiable es intentar crear una sesión y ejecutar una operación trivial (como contar un rango de números). Si el servidor no está activo, el script lanzará una excepción de conexión.
+
+### Opción 1: Script de Validación (Recomendado)
+
+Crear archivo `test_connection.py` ejecutarlo en el contenedor de Airflow. Este codigo intenta crear un DataFrame simple y mostrar un resultado.
+
+```python
+from pyspark.sql.connect.session import SparkSession
+import sys
+
+def test_spark_connect():
+    remote_url = "sc://localhost:15002"
+    print(f"Intentando conectar a {remote_url}...")
+    
+    try:
+        # 1. Crear la sesión
+        spark = SparkSession.builder.remote(remote_url).getOrCreate()
+        
+        # 2. Ejecutar una operación simple para validar la comunicación gRPC
+        # Si esto funciona, la conexión es exitosa
+        df = spark.range(10)
+        count = df.count()
+        
+        print(f"✅ ¡Conexión exitosa! El servidor devolvió el conteo: {count}")
+        print(f"   Versión del servidor: {spark.version}")
+        return True
+
+    except Exception as e:
+        print(f"❌ Error de conexión: {type(e).__name__}")
+        print(f"   Detalle: {str(e)}")
+        print("\nPosibles causas:")
+        print("  - El servidor Spark Connect no está ejecutándose.")
+        print("  - El puerto 15002 está bloqueado por un firewall.")
+        print("  - La URL es incorrecta.")
+        return False
+
+if __name__ == "__main__":
+    success = test_spark_connect()
+    sys.exit(0 if success else 1)
+```
+
+### Opción 2: Comando Rápido (One-liner)
+
+Verificación rápida desde la terminal sin crear un archivo, ejecuta este comando directamente en tu shell (Linux/Mac/PowerShell):
+
+```bash
+python -c "from pyspark.sql.connect.session import SparkSession; print('OK' if SparkSession.builder.remote('sc://localhost:15002').getOrCreate().range(1).count() == 1 else 'FAIL')"
+```
+
+*   **Salida esperada:** `OK`
+*   **Si falla:** Mostrará un rastro de error (traceback) indicando `UNAVAILABLE` o `Connection Refused`.
+
+### ¿Qué hacer si falla?
+
+Si recibes un error de conexión, verifica lo siguiente:
+
+1.  **El servidor está activo:** Asegúrate de haber iniciado el servidor Spark Connect. El comando típico es:
+    ```bash
+    $SPARK_HOME/sbin/start-connect-server.sh
+    ```
+2.  **Puerto correcto:** Confirma que el servidor está escuchando en el puerto **15002** (el predeterminado).
+3.  **Versión compatible:** Tu cliente PySpark debe tener la extensión de connect instalada (`pip install pyspark[connect]`) y la versión debe ser compatible con el servidor (generalmente Spark 3.4+ o 4.x).
+
+4. No Existe el Servidor Spark Coonect.
+
+
+### JAR Necesarios  en el Servidor o Contenedor Spark Connect
+
+Es común que en las instalaciones básicas de Spark o contenedores Docker que solo traen el núcleo de Spark. **no incluye los archivos JAR necesarios** para ejecutar el servidor Spark Connect (`spark-connect_2.13` o `spark-connect_2.12`).  
+Para solucionarlo, se debe agregar explícitamente el paquete `spark-connect` al iniciar el servidor.
+
+### Opción 1: Usar `spark-submit` con `--packages` (Recomendado)
+
+Esta es la forma más rápida. En lugar de ejecutar la clase directamente con java o el script básico, usa `spark-submit` especificando el paquete de Maven.
+
+Ejecutar este comando en la terminal del contenedor de SPARK (ajusta la versión `3.5.7` o `4.0.1` según tu instalación de Spark):
+
+```bash
+# Para Spark 3.5.x
+$SPARK_HOME/bin/spark-submit \
+  --packages org.apache.spark:spark-connect_2.12:3.5.7 \
+  --class org.apache.spark.sql.connect.service.SparkConnectServer \
+  --name "SparkConnectServer" \
+  --master local[*]
+
+# Para Spark 4.0.x (usa _2.13)
+$SPARK_HOME/bin/spark-submit \
+  --packages org.apache.spark:spark-connect_2.13:4.0.1 \
+  --class org.apache.spark.sql.connect.service.SparkConnectServer \
+  --name "SparkConnectServer" \
+  --master local[*]
+```
+
+*Nota: Si no existe la variable `$SPARK_HOME` configurada, se debe usar la ruta completa donde esta instalado Spark (ej. `/opt/spark/bin/spark-submit`).*
+
+### Opción 2: Script de Inicio Permanente
+
+Si es necesario iniciar este servidor frecuentemente, se debe crea un script llamado `start-connect.sh` con el siguiente contenido. Esto descarga los JARs la primera vez y los guarda en caché.
+
+```bash
+#!/bin/bash
+
+# Configuración
+SPARK_VERSION="3.5.7" # Cambia a 4.0.1 si usas Spark 4
+SCALA_VERSION="2.12"  # Cambia a 2.13 si usas Spark 4
+
+echo "Iniciando Spark Connect Server..."
+
+$SPARK_HOME/bin/spark-submit \
+  --name "SparkConnectServer" \
+  --master "local[*]" \
+  --conf "spark.driver.bindAddress=0.0.0.0" \
+  --conf "spark.driver.host=localhost" \
+  --packages "org.apache.spark:spark-connect_${SCALA_VERSION}:${SPARK_VERSION}" \
+  --class "org.apache.spark.sql.connect.service.SparkConnectServer"
+```
+
+Dar permisos de ejecución y ejecútarlo:
+```bash
+chmod +x start-connect.sh
+./start-connect.sh
+```
+
+### Verificación de Versión
+
+Es crucial que la versión del paquete coincida con la instalación base de Spark.
+1.  Ejecuta `$SPARK_HOME/bin/spark-submit --version` para ver tu versión actual.
+2.  Si es **3.5.x**, usa `spark-connect_2.12:3.5.x`.
+3.  Si es **4.0.x**, usa `spark-connect_2.13:4.0.x`.
+
+## Habilitar el servidor Spark Connect permanentemente en un entorno Docker  
+
+En el archivo Dockerfile.spark habilitaremos el inicio permante de Spark Connect.
+

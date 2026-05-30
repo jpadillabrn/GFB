@@ -394,10 +394,10 @@ services:
 
   # SPARK
   spark-master:
-    #image: apache/spark:3.5.1-python3
-    build:
-      context: .
-      dockerfile: Dockerfile.spark
+    image: apache/spark:3.5.1-python3
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.spark
     container_name: spark-master
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
     environment:
