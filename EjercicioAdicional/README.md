@@ -279,11 +279,21 @@ with DAG(
 El DAG de terminar exitosamente y mostrar el resultado `Pi is roughly 3.1362` como lo podemos observar en la siguiente imagen.  
 ![DAG-valida-spark](./images/DAG-valida-spark.png)  
 
-# DAG Ecobici  
+<br>
+<br>
+<br>  
+
+# DAG Ecobici Estado de Estaciones
 
 Ahora que tenemos todo listo vamos a proceder a crear nuestro DAG para el estado de las estaciones Ecobici.  
 
+El DAG [dag_ecobici_estado_estaciones](../ejercicio1/Airflow/dags/dag_ecobici_estado_estaciones.py) tomara los registros del Estado de las Estaciones para llevar acabo las tareas indicadas.  
 
+
+En este DAG logre desarrollar hasta la tarea de limpieza de datos, en la tarea para trabajr con SPARK tengo un error en  [CONNECT_URL_NOT_SET] continuare trabajando para resolver el error.
+
+
+![DAG-Ecobici.png](./images/DAG-Ecobici.png)  
 
 
 
