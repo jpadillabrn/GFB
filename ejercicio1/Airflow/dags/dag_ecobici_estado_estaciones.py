@@ -31,7 +31,9 @@ DEFAULT_ARGS: Dict[str, Any] = {
 # Configuración de infraestructura (MinIO)
 MINIO_BUCKET_URL = "s3a://bck-bronze/ecobici"
 
-os.environ["SPARK_REMOTE"] = "sc://spark-master:7077" # O usar .option("spark.remote", "...")
+#os.environ["SPARK_REMOTE"] = "spark://spark-master:7077" # O usar .option("spark.remote", "...")
+os.environ.pop("SPARK_REMOTE", None)
+os.environ.pop("SPARK_CONNECT_MODE_ENABLED", None)
 
 
 # =============================================================================
@@ -111,13 +113,28 @@ class SparkParquetWriter:
         self.target_path = target_path
         # Nota: En entornos productivos, los parámetros de S3A se leen 
         # dinámicamente desde el hook de conexión de Airflow.
+
+        # LIMPIEZA: Eliminar variables que fuerzan Spark Connect
+        if "SPARK_REMOTE" in os.environ:
+            del os.environ["SPARK_REMOTE"]
+        if "SPARK_CONNECT_MODE_ENABLED" in os.environ:
+            del os.environ["SPARK_CONNECT_MODE_ENABLED"]
+
+        # CONFIGURACIÓN: Definir paquetes necesarios para S3A/MinIO
+        # Usamos hadoop-aws y aws-java-sdk-bundle para evitar conflictos de dependencias
+        jars_packages = "org.apache.hadoop:hadoop-aws:3.4.1,software.amazon.awssdk:bundle:2.29.6,software.amazon.awssdk:core:2.29.6"
+
         self.spark = SparkSession.builder \
             .appName("Airflow-MinIO-Writer") \
+            .master("local[*]") \
+            .config("spark.jars.packages", jars_packages) \
+            .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
             .config("spark.hadoop.fs.s3a.endpoint", "http://minio:9000") \
             .config("spark.hadoop.fs.s3a.access.key", "minio") \
             .config("spark.hadoop.fs.s3a.secret.key", "minio1234") \
             .config("spark.hadoop.fs.s3a.path.style.access", "true") \
-            .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
+            .config("spark.hadoop.fs.s3a.connection.ssl.enabled", "false") \
+            .config("spark.hadoop.fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider") \
             .getOrCreate()
 
     def write_append_single_file(self, data: List[Dict[str, Any]]) -> None:
@@ -125,19 +142,26 @@ class SparkParquetWriter:
         if not data:
             return
 
-        # 1. Crear DataFrame de Spark
-        df = self.spark.createDataFrame(data)
+        try:
+            # Crear DataFrame de Spark
+            df = self.spark.createDataFrame(data)
 
-        # 2. Crear columna de partición basada exclusivamente en la fecha (sin hora)
-        df_with_partition = df.withColumn("fecha_reporte", to_date(col("last_reported_at")))
+            # Crear columna de partición basada exclusivamente en la fecha
+            df_with_partition = df.withColumn("fecha_reporte", to_date(col("last_reported_at")))
 
-        # 3. Coalesce(1) asegura un único archivo Parquet por partición física.
-        #    Mode("append") añade el archivo a la ruta sin sobreescribir los históricos.
-        df_with_partition.coalesce(1) \
-            .write \
-            .mode("append") \
-            .partitionBy("fecha_reporte") \
-            .parquet(self.target_path)
+            # Escribir en MinIO
+            # coalesce(1) fuerza un solo archivo por partición
+            df_with_partition.coalesce(1) \
+                .write \
+                .mode("append") \
+                .partitionBy("fecha_reporte") \
+                .parquet(self.target_path)
+            
+            print(f"Datos escritos exitosamente en {self.target_path}")
+            
+        except Exception as e:
+            print(f"Error escribiendo en MinIO: {str(e)}")
+            raise
 
 
 # =============================================================================
