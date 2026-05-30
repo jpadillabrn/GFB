@@ -420,7 +420,7 @@ services:
     #image: apache/spark:3.5.1-python3
     build:
       context: .
-      dockerfile: Dockerfile.spark
+      dockerfile: Dockerfile.sparkworker
     container_name: spark-worker
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     environment:
@@ -434,6 +434,25 @@ services:
     volumes:
       - ./Spark/spark-data:/opt/spark/data
     restart: unless-stopped
+  
+  spark-connect:
+    build:
+      context: .
+      dockerfile: Dockerfile.sparkconnect
+    container_name: spark-connect
+    #command: /opt/spark/sbin/start-connect-server.sh --master spark://spark-master:7077
+    command: bash -c "/opt/spark/sbin/start-connect-server.sh && tail -f /dev/null"
+    
+    depends_on:
+      - spark-master
+      - spark-worker
+    ports:
+      - "15002:15002"  # Puerto cliente Python
+      - "4040:4040"    # UI del Driver 
+    environment:
+      - SPARK_DRIVER_HOST=spark-connect
+      - SPARK_DRIVER_BIND_ADDRESS=0.0.0.0
+      - SPARK_MASTER_HOST=spark-connect
 
 volumes:
   postgres-db-volume:

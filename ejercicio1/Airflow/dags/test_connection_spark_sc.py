@@ -2,7 +2,7 @@ from pyspark.sql.connect.session import SparkSession
 import sys
 
 def test_spark_connect():
-    remote_url = "sc://spark-master:7077"
+    remote_url = "sc://spark-connect:15002"
     print(f"Intentando conectar a {remote_url}...")
     
     try:

@@ -1,0 +1,21 @@
+FROM apache/spark:3.5.1-python3
+
+USER root
+
+# Variables de entorno para facilitar la mantenimiento
+ENV SPARK_CONNECT_VERSION=3.5.1
+ENV SCALA_VERSION=2.12
+
+# Descargar el JAR de spark-connect directamente en la carpeta de librerías de Spark
+# Usamos curl para evitar dependencias adicionales de Maven en tiempo de ejecución
+RUN curl -L -o /opt/spark/jars/spark-connect_${SCALA_VERSION}-${SPARK_CONNECT_VERSION}.jar \
+    https://repo1.maven.org/maven2/org/apache/spark/spark-connect_${SCALA_VERSION}/${SPARK_CONNECT_VERSION}/spark-connect_${SCALA_VERSION}-${SPARK_CONNECT_VERSION}.jar
+
+# (Opcional) Descargar también el cliente si planeas ejecutar submit dentro del mismo contenedor
+RUN curl -L -o /opt/spark/jars/spark-connect-client_${SCALA_VERSION}-${SPARK_CONNECT_VERSION}.jar \
+    https://repo1.maven.org/maven2/org/apache/spark/spark-connect-client_${SCALA_VERSION}/${SPARK_CONNECT_VERSION}/spark-connect-client_${SCALA_VERSION}-${SPARK_CONNECT_VERSION}.jar
+
+# El puerto por defecto de Spark Connect
+EXPOSE 15002
+
+USER spark
