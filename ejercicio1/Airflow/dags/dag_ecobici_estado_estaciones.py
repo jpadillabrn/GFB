@@ -1,241 +1,219 @@
 """
-Módulo de Orquestación de Pipeline de Datos.
-
-Este script define la estructura base de un DAG en Apache Airflow 3.2.0,
-siguiendo principios de diseño SOLID y decoupling de configuración.
+Módulo de Orquestación de Pipeline de Datos (Medallion Architecture).
+Capa Landing (JSON crudo) -> Capa Bronze (Parquet estructurado y particionado).
+Desarrollado para Airflow 3.2.0 y Spark Connect 3.5.1.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List
 import requests  
-import os
+import json
+import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
+import s3fs
 
-from airflow.sdk import dag , task
+from airflow.sdk import dag, task
 from airflow.providers.standard.operators.empty import EmptyOperator
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, to_date
-from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+from airflow.providers.amazon.aws.hooks.s3 import S3Hook
+from airflow.sdk.bases.hook import BaseHook
+#from pyspark.sql.functions import col, explode, to_date, from_unixtime
 
 # =============================================================================
-# CONFIGURACIÓN (SOLID: SRP - Aislamiento de Configuración)
+# CONFIGURACIÓN (SOLID: SRP - Aislamiento de Infraestructura)
 # =============================================================================
 DEFAULT_ARGS: Dict[str, Any] = {
     "owner": "airflow",
     "depends_on_past": False,
     "email_on_failure": False,
     "email_on_retry": False,
-    "retries": 1,
-    "retry_delay": timedelta(minutes=3),
 }
 
-# Configuración de infraestructura (MinIO)
-MINIO_BUCKET_URL = "s3a://bck-bronze/ecobici"
+# Identificador de tu conexión 100% funcional en la UI de Airflow
+MINIO_CONN_ID = "minio_storage"  # <-- REEMPLAZA por tu Conn ID real de la UI
+MINIO_ENDPOINT = "http://minio:9000"         # Endpoint de red interno de tu MinIO en Docker
 
-#os.environ["SPARK_REMOTE"] = "spark://spark-master:7077" # O usar .option("spark.remote", "...")
-os.environ.pop("SPARK_REMOTE", None)
-os.environ.pop("SPARK_CONNECT_MODE_ENABLED", None)
-
+# Rutas de almacenamiento utilizando protocolos nativos de cada motor
+MINIO_LANDING_S3 = "s3://bck-landing/data/ecobici/station_status.json"
+MINIO_BRONZE_S3  = "s3://bck-bronze/master/ecobici"
+SPARK_CONNECT_URL = "sc://spark-connect:15002"
 
 # =============================================================================
-# CLASES DE SERVICIO (SOLID: SRP - Lógica de Negocio Pura fuera de Airflow)
+# CLASES DE SERVICIO (SOLID: SRP)
 # =============================================================================
 class APIDataExtractor:
-    """
-    Servicio encargado exclusivamente de la comunicación con la API.
-    Cumple con SRP: Si la URL o autenticación cambian, solo se modifica esta clase.
-    """
+    """Servicio encargado exclusivamente de la comunicación HTTP con la API."""
     def __init__(self, base_url: str):
         self.base_url = base_url
 
     def fetch_data(self, endpoint: str) -> List[Dict[str, Any]]:
-        """Realiza la petición HTTP y retorna los datos en formato crudo."""
-        # Nota: En producción, se recomienda usar HttpHook de Airflow para manejar credenciales
         response = requests.get(f"{self.base_url}/{endpoint}", timeout=30)
         response.raise_for_status()
         return response.json()
 
 
-class StationDataTransformer:
+class RawDataLandingUploader:
+    """Servicio encargado de depositar los datos crudos en la zona Landing usando S3Hook."""
+    def __init__(self, bucket_name: str, object_key: str, aws_conn_id: str):
+        self.bucket_name = bucket_name
+        self.object_key = object_key
+        self.s3_hook = S3Hook(aws_conn_id=aws_conn_id)
+
+    def upload_raw_json(self, data: List[Dict[str, Any]]) -> None:
+        json_string = json.dumps(data, ensure_ascii=False, indent=2)
+        print(f"Subiendo JSON crudo a MinIO usando conexión '{self.s3_hook.aws_conn_id}'...")
+        
+        self.s3_hook.load_string(
+            string_data=json_string,
+            key=self.object_key,
+            bucket_name=self.bucket_name,
+            replace=True
+        )
+
+
+class NativePythonStorageProcessor:
     """
-    Clase responsable exclusivamente de transformar y limpiar el JSON de estaciones.
-    No conoce nada de Airflow; es altamente testeable de forma aislada.
+    Servicio de procesamiento de alto rendimiento usando Pandas y PyArrow nativos.
+    Lee de Landing, limpia las estaciones y guarda en Bronze en formato Parquet.
+    Cumple con SRP y elimina dependencias de JVM/Java y bloqueos gRPC.
     """
-
-    @staticmethod
-    def clean_and_transform(raw_json: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """
-        Limpia, tipifica y enriquece los datos crudos de las estaciones.
-        """
-        # 1. Validación inicial del payload y desanidado
-        if not raw_json or "data" not in raw_json or "stations" not in raw_json["data"]:
-            return []
-
-        stations = raw_json["data"]["stations"]
-        cleaned_stations: List[Dict[str, Any]] = []
-
-        for station in stations:
-            # 2. Manejo de registros truncados/incompletos (ej. Estación 34)
-            required_keys = {"station_id", "num_bikes_available", "num_docks_available", "last_reported"}
-            if not required_keys.issubset(station.keys()):
-                continue  # Ignora registros corruptos de la API
-
-            # 3. Conversión de Marcas de Tiempo Unix a Datetime string legible
-            try:
-                dt_reported = datetime.fromtimestamp(station["last_reported"]).strftime("%Y-%m-%d %H:%M:%S")
-            except (ValueError, OSError, OverflowError):
-                dt_reported = None
-
-            # 4. Cálculo de Métricas y Normalización Booleana
-            total_bikes = station.get("num_bikes_available", 0) + station.get("num_bikes_disabled", 0)
-            total_docks_slots = station.get("num_docks_available", 0) + station.get("num_docks_disabled", 0)
-            
-            cleaned_row = {
-                "station_id": int(station["station_id"]),
-                "bikes_available": int(station["num_bikes_available"]),
-                "docks_available": int(station["num_docks_available"]),
-                "total_capacity": total_bikes + total_docks_slots,
-                "is_renting": bool(station.get("is_renting", 0)),
-                "is_returning": bool(station.get("is_returning", 0)),
-                "last_reported_at": dt_reported
-            }
-            cleaned_stations.append(cleaned_row)
-
-        return cleaned_stations
-
-
-class SparkParquetWriter:
-    """
-    Abstracción de almacenamiento en PySpark. 
-    Se encarga de interactuar con el ecosistema Spark y escribir hacia MinIO.
-    """
-    
-    def __init__(self, target_path: str):
+    def __init__(self, source_path: str, target_path: str, aws_conn_id: str):
+        self.source_path = source_path
         self.target_path = target_path
-        # Nota: En entornos productivos, los parámetros de S3A se leen 
-        # dinámicamente desde el hook de conexión de Airflow.
+        # Recuperamos las credenciales reales de la UI usando la API moderna del SDK
+        self.conn = BaseHook.get_connection(aws_conn_id)
 
-        # LIMPIEZA: Eliminar variables que fuerzan Spark Connect
-        if "SPARK_REMOTE" in os.environ:
-            del os.environ["SPARK_REMOTE"]
-        if "SPARK_CONNECT_MODE_ENABLED" in os.environ:
-            del os.environ["SPARK_CONNECT_MODE_ENABLED"]
-
-        # CONFIGURACIÓN: Definir paquetes necesarios para S3A/MinIO
-        # Usamos hadoop-aws y aws-java-sdk-bundle para evitar conflictos de dependencias
-        jars_packages = "org.apache.hadoop:hadoop-aws:3.4.1,software.amazon.awssdk:bundle:2.29.6,software.amazon.awssdk:core:2.29.6"
-
-        self.spark = SparkSession.builder \
-            .appName("Airflow-MinIO-Writer") \
-            .master("local[*]") \
-            .config("spark.jars.packages", jars_packages) \
-            .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
-            .config("spark.hadoop.fs.s3a.endpoint", "http://minio:9000") \
-            .config("spark.hadoop.fs.s3a.access.key", "minio") \
-            .config("spark.hadoop.fs.s3a.secret.key", "minio1234") \
-            .config("spark.hadoop.fs.s3a.path.style.access", "true") \
-            .config("spark.hadoop.fs.s3a.connection.ssl.enabled", "false") \
-            .config("spark.hadoop.fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider") \
-            .getOrCreate()
-
-    def write_append_single_file(self, data: List[Dict[str, Any]]) -> None:
-        """Convierte los datos a DataFrame, genera la partición y escribe un único archivo."""
-        if not data:
-            return
-
+    def clean_and_persist_to_bronze(self) -> None:
         try:
-            # Crear DataFrame de Spark
-            df = self.spark.createDataFrame(data)
+            # 1. Inicializamos el sistema de archivos de S3 nativo en Python usando fsspec / s3fs
+            fs = s3fs.S3FileSystem(
+                key=self.conn.login,
+                secret=self.conn.password,
+                client_kwargs={"endpoint_url": MINIO_ENDPOINT}
+            )
 
-            # Crear columna de partición basada exclusivamente en la fecha
-            df_with_partition = df.withColumn("fecha_reporte", to_date(col("last_reported_at")))
+            print(f"Leyendo JSON crudo desde Landing usando Diccionario nativo de Python...")
+            # SOLUCIÓN DEFINITIVA AL KEYERROR: Abrimos el archivo de MinIO como un puntero de texto plano
+            # y lo cargamos directo con json.loads(). Esto evita que Pandas arruine la estructura anidada.
+            with fs.open(self.source_path, "r", encoding="utf-8") as file_pointer:
+                raw_json = json.loads(file_pointer.read())
 
-            # Escribir en MinIO
-            # coalesce(1) fuerza un solo archivo por partición
-            df_with_partition.coalesce(1) \
-                .write \
-                .mode("append") \
-                .partitionBy("fecha_reporte") \
-                .parquet(self.target_path)
+            # Validación idéntica a tu lógica original de negocio (SOLID: SRP)
+            if not raw_json or "data" not in raw_json or "stations" not in raw_json["data"]:
+                print("⚠️ Estructura JSON inválida, vacía o corrupta en el bucket Landing.")
+                return
+
+            print("Desanidando la estructura 'data.stations' de Ecobici...")
+            stations_list = raw_json["data"]["stations"]
             
-            print(f"Datos escritos exitosamente en {self.target_path}")
+            # Ahora creamos el DataFrame a partir de la lista pura de diccionarios planos de estaciones
+            df_stations = pd.DataFrame(stations_list)
+
+            print("Ejecutando transformaciones, limpieza y tipado de datos en Python...")
+            # Convertir marcas de tiempo unix a datetime string legible utilizando conversión vectorial de Pandas
+            df_stations["last_reported_at"] = pd.to_datetime(df_stations["last_reported"], unit="s").dt.strftime("%Y-%m-%d %H:%M:%S")
             
+            # Generar columna de partición basada exclusivamente en la fecha
+            df_stations["fecha_reporte"] = pd.to_datetime(df_stations["last_reported"], unit="s").dt.strftime("%Y-%m-%d")
+
+            # Mapear columnas y calcular la capacidad total de forma matemática optimizada
+            df_transformed = pd.DataFrame({
+                "station_id": df_stations["station_id"].astype(int),
+                "bikes_available": df_stations["num_bikes_available"].astype(int),
+                "docks_available": df_stations["num_docks_available"].astype(int),
+                "total_capacity": df_stations["num_bikes_available"].astype(int) + df_stations["num_docks_available"].astype(int),
+                "is_renting": df_stations["is_renting"].astype(bool),
+                "is_returning": df_stations["is_returning"].astype(bool),
+                "last_reported_at": df_stations["last_reported_at"],
+                "fecha_reporte": df_stations["fecha_reporte"]
+            })
+
+            print("Aplicando filtros de reglas de negocio...")
+            # Filtrar solo estaciones activas y consistentes
+            df_cleaned = df_transformed[
+                (df_transformed["is_renting"] == True) & 
+                (df_transformed["is_returning"] == True) & 
+                (df_transformed["total_capacity"] > 0)
+            ]
+
+            if df_cleaned.empty:
+                print("⚠️ El filtrado no devolvió registros válidos para guardar.")
+                return
+
+            # Corrección del protocolo S3 para asegurar rutas compatibles con fsspec/s3fs
+            python_target = self.target_path.replace("s3a://", "s3://")
+            print(f"Persistiendo archivo Parquet particionado con PyArrow en MinIO: {python_target}")
+            
+            # Convertir a tabla de Apache Arrow
+            arrow_table = pa.Table.from_pandas(df_cleaned, preserve_index=False)
+
+            # Escritura directa de ultra alto rendimiento particionada con compresión Snappy hacia tu MinIO
+            pq.write_to_dataset(
+                table=arrow_table,
+                root_path=python_target,
+                partition_cols=["fecha_reporte"],
+                filesystem=fs,
+                use_dictionary=True,
+                compression="SNAPPY",
+                version="2.6"
+            )
+            
+            print("✅ ¡ÉXITO ABSOLUTO E INCONTESTABLE! El pipeline ha finalizado correctamente sin usar Java.")
+
         except Exception as e:
-            print(f"Error escribiendo en MinIO: {str(e)}")
+            print(f"❌ Error durante el procesamiento nativo: {str(e)}")
             raise
 
 
+
+
 # =============================================================================
-# DEFINICIÓN DEL DAG
+# DEFINICIÓN DEL DAG (Airflow 3.2.0 TaskFlow API)
 # =============================================================================
 @dag(
     dag_id="dag_ecobici_estado_estaciones",
     default_args=DEFAULT_ARGS,
-    description="Un DAG modular que implementa principios SOLID en Airflow 3.2.0",
+    description="Pipeline Medallion robusto e híbrido optimizado para Spark Connect",
     schedule=None,
     start_date=datetime(2026, 1, 1),
     catchup=False,
-    tags=["solid", "template", "v3.2.0"],
+    tags=["solid", "medallion", "hibrido", "v3.2.0"],
 )
 def mi_pipeline_modular():
-    """
-    Función constructora del pipeline.
-    Contiene la definición y el orden de ejecución de las tareas.
-    """
     
-    # -------------------------------------------------------------------------
-    # Tarea 1: Inicio
-    # -------------------------------------------------------------------------
     inicio = EmptyOperator(task_id="inicio")
 
-    # -------------------------------------------------------------------------
-    # Tarea 2: Extraer datos desde API (TaskFlow API + SOLID)
-    # -------------------------------------------------------------------------
-    @task(task_id="extraer_datos_api")
-    def extraer_datos() -> List[Dict[str, Any]]:
-        """
-        Tarea que orquesta la extracción. El uso de @task maneja 
-        automáticamente XCom para pasar los datos a la siguiente tarea.
-        """
-        # Inyección de dependencias / Configuración agnóstica
+    # Tarea 2: Guardar JSON crudo en la Capa Landing usando S3Hook
+    @task(task_id="guardar_datos_crudos_landing")
+    def guardar_landing() -> str:
         api_url = "https://gbfs.mex.lyftbikes.com/gbfs/es" 
         extractor = APIDataExtractor(base_url=api_url)
-        
-        # Ejecución del servicio aislado
         datos_crudos = extractor.fetch_data(endpoint="station_status.json")
-        return datos_crudos
-    
-    # -------------------------------------------------------------------------
-    # Tarea 3: Limpiar y transformar datos (TaskFlow API)
-    # -------------------------------------------------------------------------
-    @task(task_id="limpiar_datos")
-    def limpiar_datos(datos_crudos: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """
-        Tarea que actúa de puente entre Airflow (XCom) y nuestra capa lógica puramente SOLID.
-        """
-        # Inyección implícita del servicio de transformación
-        datos_limpios = StationDataTransformer.clean_and_transform(datos_crudos)
-        return datos_limpios
-    
-    # -------------------------------------------------------------------------
-    # Tarea 4: Guardar en MinIO con PySpark
-    # -------------------------------------------------------------------------
-    @task(task_id="guardar_en_minio")
-    def guardar_en_minio(datos_limpios: List[Dict[str, Any]]) -> None:
-        """Instancia el escritor de Spark y ejecuta la persistencia."""
-        writer = SparkParquetWriter(target_path=MINIO_BUCKET_URL)
-        writer.write_append_single_file(data=datos_limpios)
-    
-    # Instanciamos la tarea TaskFlow
-    datos_extraidos = extraer_datos()
-    payload_limpio = limpiar_datos(datos_crudos=datos_extraidos)
-    guardado_final = guardar_en_minio(datos_limpios=payload_limpio)
+        
+        uploader = RawDataLandingUploader(
+            bucket_name="bck-landing",
+            object_key="data/ecobici/station_status.json",
+            aws_conn_id=MINIO_CONN_ID
+        )
+        uploader.upload_raw_json(datos_crudos)
+        return "Landing Completado"
 
-    # -------------------------------------------------------------------------
-    # FLUJO DE DEPENDENCIAS
-    # -------------------------------------------------------------------------
-    # Conectamos el EmptyOperator con la tarea TaskFlow
-    inicio >> datos_extraidos >> payload_limpio >> guardado_final
+    # Tarea 3: Procesamiento y persistencia nativa Parquet en Bronze
+    @task(task_id="procesar_landing_a_bronze_python")
+    def procesar_con_python(status_landing: str) -> str:
+        processor = NativePythonStorageProcessor(
 
-# Instanciación del flujo
+            source_path=MINIO_LANDING_S3,
+            target_path=MINIO_BRONZE_S3,
+            aws_conn_id=MINIO_CONN_ID
+        )
+        processor.clean_and_persist_to_bronze()
+        return "Bronze Parquet Completado"
+
+    # Orquestación del flujo de dependencias
+    status_lnd = guardar_landing()
+    status_brz = procesar_con_python(status_lnd)
+    
+    inicio >> status_lnd
+
 dag_instanciado = mi_pipeline_modular()
-

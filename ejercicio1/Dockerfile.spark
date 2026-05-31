@@ -2,6 +2,39 @@ FROM apache/spark:3.5.1-python3
 
 USER root
 
+# Instalar dependencias necesarias para compilar Python
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    wget \
+    libssl-dev \
+    libffi-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    zlib1g-dev \
+    libncurses5-dev \
+    libgdbm-dev \
+    libnss3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Descargar y compilar Python 3.13.0
+RUN wget https://www.python.org/ftp/python/3.13.0/Python-3.13.0.tgz && \
+    tar xzf Python-3.13.0.tgz && \
+    cd Python-3.13.0 && \
+    ./configure --enable-optimizations --with-ensurepip=install && \
+    make -j$(nproc) && \
+    make altinstall && \
+    cd .. && rm -rf Python-3.13.0*
+
+# Crear un enlace simbólico 'python3.13' si no se creó (por si acaso)
+RUN ln -sf /usr/local/bin/python3.13 /usr/local/bin/python3
+
+# Establecer la variable para que PySpark use este Python
+ENV PYSPARK_PYTHON=/usr/local/bin/python3.13
+
+
+# SPARK Connect
+
 # Variables de entorno para facilitar la mantenimiento
 ENV SPARK_CONNECT_VERSION=3.5.1
 ENV SCALA_VERSION=2.12
@@ -17,5 +50,6 @@ RUN curl -L -o /opt/spark/jars/spark-connect-client_${SCALA_VERSION}-${SPARK_CON
 
 # El puerto por defecto de Spark Connect
 EXPOSE 15002
+
 
 USER spark

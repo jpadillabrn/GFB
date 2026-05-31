@@ -394,21 +394,26 @@ services:
 
   # SPARK
   spark-master:
-    image: apache/spark:3.5.1-python3
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile.spark
+    #image: apache/spark:3.5.1-python3
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
     container_name: spark-master
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
     environment:
+      - SPARK_MODE=master
+      #- SPARK_SUBMIT_OPTS=--packages org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.12.262
       - SPARK_MASTER_HOST=spark-master
       - SPARK_MASTER_PORT=7077
-      - SPARK_MASTER_WEBUI_PORT=8080
+      - SPARK_MASTER_WEBUI_PORT=8080      
     ports:
       - "8081:8080"   # UI
       - "7077:7077"   # Comunicación
     volumes:
       - ./Spark/spark-data:/opt/spark/data
+      # - ./Spark/spark_jars/hadoop-aws-3.3.4.jar:/opt/spark/jars/hadoop-aws-3.3.4.jar
+      # - ./Spark/spark_jars/aws-java-sdk-bundle-1.12.262.jar:/opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar
+
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/"]
       interval: 10s
@@ -420,39 +425,57 @@ services:
     #image: apache/spark:3.5.1-python3
     build:
       context: .
-      dockerfile: Dockerfile.sparkworker
+      dockerfile: Dockerfile.spark
     container_name: spark-worker
     command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      #- SPARK_SUBMIT_OPTS=--packages org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.12.262
       - SPARK_WORKER_MEMORY=2G
       - SPARK_WORKER_CORES=2
-      - SPARK_WORKER_WEBUI_PORT=8081
+      - SPARK_WORKER_WEBUI_PORT=8081      
     ports:
       - "8082:8081"   # UI worker
     depends_on:
       - spark-master
     volumes:
       - ./Spark/spark-data:/opt/spark/data
+      # - ./Spark/spark_jars/hadoop-aws-3.3.4.jar:/opt/spark/jars/hadoop-aws-3.3.4.jar
+      # - ./Spark/spark_jars/aws-java-sdk-bundle-1.12.262.jar:/opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar
     restart: unless-stopped
   
   spark-connect:
     build:
       context: .
-      dockerfile: Dockerfile.sparkconnect
+      dockerfile: Dockerfile.spark
     container_name: spark-connect
-    #command: /opt/spark/sbin/start-connect-server.sh --master spark://spark-master:7077
     command: bash -c "/opt/spark/sbin/start-connect-server.sh && tail -f /dev/null"
+    #command: /opt/spark/sbin/start-connect-server.sh --packages org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.12.262
     
-    depends_on:
-      - spark-master
-      - spark-worker
-    ports:
-      - "15002:15002"  # Puerto cliente Python
-      - "4040:4040"    # UI del Driver 
     environment:
+      - SPARK_MODE=connect
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      #- SPARK_SUBMIT_OPTS=--packages org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.12.262
       - SPARK_DRIVER_HOST=spark-connect
       - SPARK_DRIVER_BIND_ADDRESS=0.0.0.0
       - SPARK_MASTER_HOST=spark-connect
+      #- SPARK_CONF_spark_jars_packages=org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.12.262
+      - SPARK_JARS_PACKAGES=org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.12.262
+      - SPARK_JARS_REPOSITORIES=https://maven.org
+    
+    ports:
+      - "15002:15002"  # Puerto cliente Python
+      - "4040:4040"    # UI del Driver    
+    depends_on:
+      - spark-master
+      - spark-worker
+    volumes:
+      - ./Spark/spark-data:/opt/spark/data
+      # - ./Spark/spark-connect-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      # - ./Spark/spark_jars/hadoop-aws-3.3.4.jar:/opt/spark/jars/hadoop-aws-3.3.4.jar
+      # - ./Spark/spark_jars/aws-java-sdk-bundle-1.12.262.jar:/opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar
+    restart: unless-stopped
 
 volumes:
   postgres-db-volume:
